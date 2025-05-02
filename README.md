@@ -11,6 +11,11 @@ ruby speed-test.rb
 Then answer the prompts
 
 
+# Results
+
+See [results.md](results.md)
+
+
 ## ollama benchmark alternative
 See [docs](https://github.com/ollama/ollama/blob/main/docs/benchmark.md)
 

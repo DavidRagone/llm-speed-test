@@ -7,6 +7,3 @@ the movement of the planets. Clicking on or hovering over a planetary body
 should show the viewer information about that body, such as its name, size,
 rotation, what it orbits and how fast its orbit is, and when it was discovered 
 and by whom.
-
-Create that file in the current working directory.
-

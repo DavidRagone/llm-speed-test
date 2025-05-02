@@ -1,5 +1,5 @@
-| Device | Service | Model | Total duration | Load duration | Prompt eval count | Prompt eval duration | Prompt eval rate | eval count | eval duration | eval rate | file | passes? | error(s) |
-| ------ | ------- | ----- | -------------- | ------------- | ----------------- | -------------------- | ---------------- | ---------- | ------------- | --------- | ---- | ------- | -------- |
+| Device | Service | Model | Total duration <br />(seconds) | Load duration <br /> (seconds) | Prompt eval count <br /> (tokens) | Prompt eval duration <br /> (seconds) | Prompt eval rate <br /> (tokens/second) | eval count <br /> (tokens) | eval duration <br /> (seconds) | eval rate <br /> (tokens/second) | file | passes? | error(s) |
+| ------ | ------- | ----- | -------------: | ------------: | ----------------: | -------------------: | ---------------: | ---------: | ------------: | --------: | ---- | :-------: | -------- |
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:7b | 40.019 | .0313 | 157 | .325 | 482.62 | 3013 | 39.66 | 75.97 | [thinking](results/deepseek-r1:7b.md) [html](results/deepseek-r1:7b.html) | FALSE | `Uncaught SyntaxError: Unexpected identifier 'hovered'` |
 | Mac M3 Ultra 512GB |  ollama | qwen3:32b | 155.796 | .0336ms | 162 | 1.34 | 120.19 | 3176 | 154.41 | 20.57 | [thinking](results/qwen3:32b.md) [html](results/qwen3:32b.html) | TRUE | |
 | Mac M3 Ultra 512GB | ollama | gemma3:27b | 101.972 | .0574 | 168 | .949 | 176.95 | 2576 | 100.96 | 25.51 | [thinking](results/gemma3:27b.md) [html](results/gemma3:27b.html) | TRUE | planets spin nearly off page |

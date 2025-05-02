@@ -1,4 +1,5 @@
 | Device | Service | Model | Total duration | Load duration | Prompt eval count | Prompt eval duration | Prompt eval rate | eval count | eval duration | eval rate | file | passes? | error(s) |
+|        |         |       |    (seconds)   |   (seconds)   |      (tokens)     |      (seconds)       |  (tokens/second) |  (tokens)  |   (seconds)   | (tokens/second) |   |   |   |
 | ------ | ------- | ----- | -------------- | ------------- | ----------------- | -------------------- | ---------------- | ---------- | ------------- | --------- | ---- | ------- | -------- |
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:7b | 40.019 | .0313 | 157 | .325 | 482.62 | 3013 | 39.66 | 75.97 | [thinking](results/deepseek-r1:7b.md) [html](results/deepseek-r1:7b.html) | FALSE | `Uncaught SyntaxError: Unexpected identifier 'hovered'` |
 | Mac M3 Ultra 512GB |  ollama | qwen3:32b | 155.796 | .0336ms | 162 | 1.34 | 120.19 | 3176 | 154.41 | 20.57 | [thinking](results/qwen3:32b.md) [html](results/qwen3:32b.html) | TRUE | |

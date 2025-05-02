@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #solarsystem {
+        position: relative;
+        height: 500px;
+        width: 500px;
+        background-color: black;
+      }
+
+      .planet {
+        position: absolute;
+        border-radius: 50%;
+        transform-origin: center center;
+      }
+
+      #zoomControls{
+         position: relative;
+         margin-top: 10px;
+      }
+    </style>
+  </head>
+
+<body>
+  <div id="solarsystem">
+    <!-- Planets will be added here -->
+  </div>
+
+  <button onclick="zoomIn()">Zoom In</button>
+  <button onclick="zoomOut()">Zoom Out</button>
+
+  <script>
+    // Define planets and their sizes, colors, speeds etc.
+    let planets = [
+      {name: "Mercury", radius: 20, color: "grey"},
+      /* add more planets */
+    ];
+
+    // Function to draw the planets
+    function drawPlanets() {
+      let solarsystem = document.getElementById("solarsystem");
+      for (let planet of planets) {
+        let div = document.createElement('div');
+        div.className = "planet";
+        div.style.width = `${planet.radius*2}px`; // diameter
+        div.style.height = `${planet.radius*2}px`;
+        div.style.backgroundColor = planet.color;
+
+        /* Add other properties */
+
+        solarsystem.appendChild(div);
+      }
+    }
+
+    // Function to zoom in and out
+    function zoomIn() {
+      let solarSystem = document.getElementById("solarsystem");
+      solarSystem.style.width = `${parseInt(solarSystem.style.width) + 10}px`;
+      solarSystem.style.height = `${parseInt(solarSystem.style.height) + 10}px`;
+    }
+
+    function zoomOut() {
+      let solarSystem = document.getElementById("solarsystem");
+      solarSystem.style.width = `${parseInt(solarSystem.style.width) - 10}px`;
+      solarSystem.style.height = `${parseInt(solarSystem.style.height) - 10}px`;
+    }
+
+    // Draw the planets initially
+    drawPlanets();
+  </script>
+</body>
+
+</html>

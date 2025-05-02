@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Solar System</title>
+<style>
+body {
+  background-color: #000;
+  overflow: hidden;
+  margin: 0;
+}
+
+#container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.orbit {
+  position: absolute;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.moon {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #aaa;
+  z-index: 10;
+}
+
+#info {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  display: none; /* Hidden by default */
+}
+</style>
+</head>
+<body>
+
+<div id="container">
+  <div class="orbit" id="sunOrbit" style="width: 800px; height: 800px;"></div>
+  <div class="planet" id="sun" style="width: 80px; height: 80px; background-color: yellow; top: calc(50% - 40px); left: calc(50% - 40px); border-radius: 50%;"></div>
+
+  <div class="orbit" id="mercuryOrbit" style="width: 200px; height: 200px;"></div>
+  <div class="planet" id="mercury" style="width: 10px; height: 10px; top: 20px; left: 90px;"></div>
+
+  <div class="orbit" id="venusOrbit" style="width: 300px; height: 300px;"></div>
+  <div class="planet" id="venus" style="width: 15px; height: 15px; top: 50px; left: 135px;"></div>
+
+  <div class="orbit" id="earthOrbit" style="width: 400px; height: 400px;"></div>
+  <div class="planet" id="earth" style="width: 20px; height: 20px; top: 80px; left: 190px;">
+      <div class="moon" id="moon" style="width: 5px; height: 5px; top: 10px; left: 10px;"></div>
+  </div>
+
+  <div class="orbit" id="marsOrbit" style="width: 500px; height: 500px;"></div>
+  <div class="planet" id="mars" style="width: 12px; height: 12px; top: 120px; left: 245px;"></div>
+
+</div>
+
+<div id="info">
+  <h3 id="infoTitle">Planet Information</h3>
+  <p id="infoContent"></p>
+</div>
+
+<script>
+const container = document.getElementById('container');
+const infoDiv = document.getElementById('info');
+const infoTitle = document.getElementById('infoTitle');
+const infoContent = document.getElementById('infoContent');
+
+const planets = {
+    'mercury': { name: 'Mercury', size: 2440, rotation: 59, orbitSpeed: 48, orbits: 'Sun', discovered: 'Ancient Times'},
+    'venus': { name: 'Venus', size: 12104, rotation: 243, orbitSpeed: 35, orbits: 'Sun', discovered: 'Ancient Times'},
+    'earth': { name: 'Earth', size: 12742, rotation: 1, orbitSpeed: 30, orbits: 'Sun', discovered: 'Ancient Times'},
+    'mars': { name: 'Mars', size: 6779, rotation: 1.03, orbitSpeed: 24, orbits: 'Sun', discovered: 'Ancient Times'}
+};
+
+const moonData = {
+  'moon': {name: 'Moon', size: 3475, rotation: 27.3, orbits: 'Earth'}
+}
+
+let angleMercury = 0;
+let angleVenus = 0;
+let angleEarth = 0;
+let angleMars = 0;
+let angleMoon = 0;
+
+const orbitSpeedMultiplier = 0.005;
+
+function animate() {
+  angleMercury += orbitSpeedMultiplier * planets['mercury'].orbitSpeed;
+  angleVenus += orbitSpeedMultiplier * planets['venus'].orbitSpeed;
+  angleEarth += orbitSpeedMultiplier * planets['earth'].orbitSpeed;
+  angleMars += orbitSpeedMultiplier * planets['mars'].orbitSpeed;
+  angleMoon += orbitSpeedMultiplier * 5;
+
+  document.getElementById('mercury').style.left = Math.cos(angleMercury) * 100 + 150 + 'px';
+  document.getElementById('mercury').style.top = Math.sin(angleMercury) * 100 + 50 + 'px';
+
+  document.getElementById('venus').style.left = Math.cos(angleVenus) * 150 + 150 + 'px';
+  document.getElementById('venus').style.top = Math.sin(angleVenus) * 150 + 50 + 'px';
+
+  document.getElementById('earth').style.left = Math.cos(angleEarth) * 200 + 150 + 'px';
+  document.getElementById('earth').style.top = Math.sin(angleEarth) * 200 + 50 + 'px';
+
+  document.getElementById('mars').style.left = Math.cos(angleMars) * 250 + 150 + 'px';
+  document.getElementById('mars').style.top = Math.sin(angleMars) * 250 + 50 + 'px';
+
+  document.getElementById('moon').style.left = Math.cos(angleMoon) * 20 + 20 + 'px';
+  document.getElementById('moon').style.top = Math.sin(angleMoon) * 20 + 20 + 'px';
+
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+// Event listeners for planet information
+const planetElements = document.querySelectorAll('.planet');
+planetElements.forEach(planet => {
+    planet.addEventListener('mouseover', (event) => {
+        const planetId = event.target.id;
+        const planetData = planets[planetId];
+
+        infoTitle.textContent = planetData.name;
+        infoContent.innerHTML = `
+            Size: ${planetData.size} km<br>
+            Rotation: ${planetData.rotation} days<br>
+            Orbit Speed: ${planetData.orbitSpeed} km/s<br>
+            Orbits: ${planetData.orbits}
+        `;
+        infoDiv.style.display = 'block';
+    });
+
+    planet.addEventListener('mouseout', () => {
+        infoDiv.style.display = 'none';
+    });
+});
+
+
+</script>
+

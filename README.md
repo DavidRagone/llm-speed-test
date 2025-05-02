@@ -3,18 +3,22 @@
 My local attempt at evaluating different LLMs by speed (but also subjectively by
 quality of output).
 
-Probably better off replacing this with [llm](https://github.com/simonw/llm).
 
 ```sh
 cat prompt.md | pbcopy
 ollama run model_name --verbose
 ```
 
-| Service | Model | Total duration | Prompt eval count | Prompt eval duration | Prompt eval rate | eval count | eval duration | eval rate | file | passes? | error(s) |
-| ------- | ----- | -------------- | ----------------- | -------------------- | ---------------- | ---------- | ------------- | --------- | ---- | ------- | -------- |
-| ollama | deepseek-r1:7b | 40.019s | 31.3215ms | 157 token(s) | 325.31ms | 482.62 tokens/s | 3013 token(s) | 39.66s | 75.97 tokens/s | [thinking](results/deepseek-r1:7b.md) [html](results/deepseek-r1:7b.html) | FALSE | `Uncaught SyntaxError: Unexpected identifier 'hovered'` |
-| ollama | qwen3:32b | 2m35.796s | 33.6295ms | 162 token(s) | 1.34s | 120.19 tokens/s | 3176 token(s) | 2m34.41s | 20.57 tokens/s | [thinking](results/qwen3:32b.md) [html](results/qwen3:32b.html) | TRUE | |
+| Device | Service | Model | Total duration | Prompt eval count | Prompt eval duration | Prompt eval rate | eval count | eval duration | eval rate | file | passes? | error(s) |
+| ------ | ------- | ----- | -------------- | ----------------- | -------------------- | ---------------- | ---------- | ------------- | --------- | ---- | ------- | -------- |
+| Mac M3 Ultra 512GB | ollama | deepseek-r1:7b | 40.019s | 31.3215ms | 157 token(s) | 325.31ms | 482.62 tokens/s | 3013 token(s) | 39.66s | 75.97 tokens/s | [thinking](results/deepseek-r1:7b.md) [html](results/deepseek-r1:7b.html) | FALSE | `Uncaught SyntaxError: Unexpected identifier 'hovered'` |
+| Mac M3 Ultra 512GB |  ollama | qwen3:32b | 2m35.796s | 33.6295ms | 162 token(s) | 1.34s | 120.19 tokens/s | 3176 token(s) | 2m34.41s | 20.57 tokens/s | [thinking](results/qwen3:32b.md) [html](results/qwen3:32b.html) | TRUE | |
+| Mac M3 Ultra 512GB | ollama | gemma3:27b | 1m41.972s | 57.408ms | 168 token(s) | 949.41ms | 176.95 tokens/s | 2576 token(s) | 1m40.96s | 25.51 tokens/s | [thinking](results/gemma3:27b.md) [html](results/gemma3:27b.html) | TRUE | planets spin nearly off page |
 
 
 ## ollama benchmark alternative
 See [docs](https://github.com/ollama/ollama/blob/main/docs/benchmark.md)
+
+## TODOs
+[ ] Set up GitHub pages for viewing the html output
+[ ] Try replacing ollama call with [llm](https://github.com/simonw/llm).

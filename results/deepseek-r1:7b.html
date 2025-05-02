@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        #solar-system {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            padding: 100px;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .planet {
+            position: absolute;
+            top: -infinite;
+            left: -infinite;
+        }
+
+        .orbit {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform-origin: center;
+        }
+
+        .info-modal {
+            position: absolute;
+            top: -infinite;
+            left: -infinite;
+            width: 400px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .info-box {
+            position: relative;
+            z-index: 1;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .black-hole {
+            position: relative;
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="solar-system"></div>
+
+    <script>
+        const solarSystem = document.getElementById('solar-system');
+        let isInitialized = false;
+
+        // Create stars
+        function createStars() {
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animation = `scale(${Math.random()}) ${Math.random()/5}s infinite linear`;
+                solarSystem.appendChild(star);
+            }
+        }
+
+        // Create planets and their orbits
+        const planets = [
+            { name: 'Mercury', radius: 3, orbitRadius: 70, speed: 4.2 },    // Mercury-like
+            { name: 'Venus', radius: 5, orbitRadius: 90, speed: 3.5 },      // Venus-like
+            { name: 'Earth', radius: 6, orbitRadius: 100, speed: 2.4 },     // Earth-like
+            { name: 'Mars', radius: 4, orbitRadius: 120, speed: 3 },       // Mars-like
+            { name: 'Jupiter', radius: 15, orbitRadius: 180, speed: 2 },    // Jupiter-like
+            { name: 'Saturn', radius: 10, orbitRadius: 220, speed: 1.8 },   // Saturn-like
+            { name: 'Uranus', radius: 14, orbitRadius: 250, speed: 1.6 },    // Uranus-like
+            { name: 'Neptune', radius: 13, orbitRadius: 270, speed: 1.4 }     // Neptune-like
+        ];
+
+        function createPlanets() {
+            planets.forEach(planet => {
+                const orbit = document.createElement('div');
+                orbit.className = 'orbit';
+                orbit.style.width = planet.orbitRadius * 2 + '%';
+                orbit.style.height = planet.orbitRadius * 2 + '%';
+                orbit.style.left = '50%';
+                orbit.style.top = '50%';
+                orbit.style.transform = `translate(-50%, -50%)`;
+                solarSystem.appendChild(orbit);
+
+                const planetElement = document.createElement('div');
+                planetElement.className = 'planet';
+                planetElement.innerHTML = `
+                    <div class="info-box">
+                        <h3>${planet.name}</h3>
+                        <p>Orbiting ${planet.orbitRadius * 10} units from Sun</p>
+                    </div>
+                `;
+
+                let angle, angleSpeed;
+                if (isInitialized) {
+                    angle = Math.random() * 2 * Math.PI;
+                    angleSpeed = (planet.speed / 4.5) || 0.5; // Adjust speed
+                } else {
+                    isInitialized = true;
+                    angle = Math.random() * 2 * Math.PI;
+                    angleSpeed = planet.speed;
+                }
+
+                const animate = () => {
+                    angle += angleSpeed;
+                    const x = (1 - Math.cos(angle)) * (planet.orbitRadius - 50) + 50;
+                    const y = (Math.sin(angle)) * (planet.orbitRadius - 50) + 50;
+
+                    planetElement.style.left = `${x}px`;
+                    planetElement.style.top = `${y}px`;
+                };
+
+                document.getElementById('solar-system').addEventListener('click', () => {
+                    if (planetElement hovered()) {
+                        document.querySelector('.info-modal').style.display = 'block';
+                        document.querySelector('.black-hole').className = 'fa-asterisk';
+                    } else {
+                        document.querySelector('.info-modal').style.display = 'none';
+                        document.querySelector('.black-hole').className = 'fa-blackhole`;
+                    }
+                });
+
+                planetElement.addEventListener('mouseover', (e) => {
+                    if (!isInitialized) isInitialized = true;
+                });
+                planetElement.addEventListener('mouseout', () => { isInitialized = false; });
+
+                solarSystem.appendChild(planetElement);
+
+                // Create moons
+                for(let i=0; i<2; i++) {
+                    const moon = document.createElement('div');
+                    moon.className = 'info-box';
+                    moon.innerHTML = `
+                        <h3>${planet.name}</h3>
+                        <p>Has a moon</p>
+                    `;
+                    moon.style.left = `${x}px`;
+                    moon.style.top = `${y}px`;
+                    solarSystem.appendChild(moon);
+                }
+
+                // Animation
+                setInterval(animate, 10);
+            });
+        }
+
+        createPlanets();
+
+        // Initial setup
+        createStars();
+        document.getElementById('solar-system').addEventListener('click', () => {
+            const sun = document.querySelector('.info-box');
+            sun.style.backgroundColor = 'yellow';
+            document.querySelector('.black-hole').className = 'fa-odot';
+        });
+
+        function updateSun() {
+            const sun = document.querySelector('.info-box');
+            if (isInitialized) {
+                sun.style.backgroundColor = `radial-gradient(circle at 30% 30%, ${isInitialized ? 'white' : '#FF6B6B'},
+                    ${isInitialized ? 'white' : '#FF6B6B'}, ${Math.random() * 120 + 5}% transparent)`;
+            }
+        }
+
+        setInterval(updateSun, 5000);
+
+        function moonPhases() {
+            const sun = document.querySelector('.info-box');
+            if (isInitialized) {
+                sun.style.backgroundOPaddingMoonPhase();
+            }
+        }
+
+        // Add some effects
+        window.addEventListener('scroll', () => {
+            if (isInitialized) {
+                document.getElementById('solar-system').style.setProperty('--backdrop-filter',
+                    `(url('data:image/svg+xml,%3Csvg width='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%2387CEEB'%3E%3Ccircle cx='50' cy='50' r='30' stroke='%2FDBE4' stroke-width='2' fill='none'%3E%3C/svg%3E')`);
+            }
+        });
+
+        // Event listeners for mouse actions
+        document.getElementById('solar-system').addEventListener('mousemove', (e) => {
+            if (!isInitialized) return;
+
+            const sun = document.querySelector('.info-box');
+            const rect = solarSystem.getBoundingClientRect();
+            const x = e.clientX - rect.left + 50;
+            const y = e.clientY - rect.top + 50;
+
+            let angle = Math.atan2(y, x);
+            if (x === 0 && y === 0) {
+                document.querySelector('.info-modal').style.display = 'block';
+            } else {
+                document.querySelector('.info-modal').style.display = 'none';
+            }
+        });
+
+        document.getElementById('solar-system').addEventListener('mousemove', (e) => {
+            if (!isInitialized) return;
+
+            const sun = document.querySelector('.info-box');
+            const rect = solarSystem.getBoundingClientRect();
+            const x = e.clientX - rect.left + 50;
+            const y = e.clientY - rect.top + 50;
+
+            let angle = Math.atan2(y, x);
+            if (x === 0 && y === 0) {
+                document.querySelector('.info-modal').style.display = 'block';
+            } else {
+                document.querySelector('.info-modal').style.display = 'none';
+            }
+        });
+
+        // Add some floating effect to planets
+        const planetElements = document.querySelectorAll('.planet');
+        let animatePlanets = () => {
+            for(let planet of planetElements) {
+                if (isInitialized) {
+                    const angle = Math.random() * 2 * Math.PI;
+                    const x = (Math.cos(angle)) * (planet.orbitRadius - 50) + 50;
+                    const y = (Math.sin(angle)) * (planet.orbitRadius - 50) + 50;
+
+                    planet.style.left = `${x}px`;
+                    planet.style.top = `${y}px`;
+                }
+            }
+        };
+
+        setInterval(animatePlanets, 1000);
+    </script>
+</body>
+</html>
+

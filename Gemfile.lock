@@ -1,0 +1,32 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bigdecimal (3.1.9)
+    csv (3.3.4)
+    highline (3.1.2)
+      reline
+    httparty (0.23.1)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
+    io-console (0.8.0)
+    json (2.11.3)
+    mini_mime (1.1.5)
+    multi_xml (0.7.2)
+      bigdecimal (~> 3.1)
+    redcarpet (3.6.1)
+    reline (0.6.1)
+      io-console (~> 0.5)
+
+PLATFORMS
+  arm64-darwin-24
+  ruby
+
+DEPENDENCIES
+  highline
+  httparty
+  json
+  redcarpet
+
+BUNDLED WITH
+   2.6.7

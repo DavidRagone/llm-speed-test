@@ -21,5 +21,6 @@ ollama run model_name --verbose
 See [docs](https://github.com/ollama/ollama/blob/main/docs/benchmark.md)
 
 ## TODOs
-[ ] Set up GitHub pages for viewing the html output
-[ ] Try replacing ollama call with [llm](https://github.com/simonw/llm).
+
+- [ ] Set up GitHub pages for viewing the html output
+- [ ] Try replacing ollama call with [llm](https://github.com/simonw/llm).

@@ -11,3 +11,4 @@
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:32b | 91.02 | 7.236 | 148 | 1.142 | 129.597 | 1901 | 8.264 | 230.034 | [thinking](results/results/deepseek-r1:32b.md) [html](results/results/deepseek-r1:32b.html) | tbd | tbd |
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:70b | 232.302 | 14.052 | 148 | 6.753 | 21.916 | 2487 | 21.15 | 117.589 | [thinking](results/results/deepseek-r1:70b.md) [html](results/results/deepseek-r1:70b.html) | tbd | tbd |
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:671b | 219.493 | 20.788 | 149 | 11.52 | 12.934 | 2367 | 18.718 | 126.456 | [thinking](results/results/deepseek-r1:671b.md) [html](results/results/deepseek-r1:671b.html) | FALSE | Just a visible square |
+| Mac M3 Ultra 512GB | ollama | mistral-large:latest | 293.791 | 27.193 | 166 | 12.724 | 13.046 | 1860 | 25.387 | 73.266 | [thinking](results/results/mistral-large:latest.md) [html](results/results/mistral-large:latest.html) | FALSE | All I see is big circles |

@@ -13,7 +13,7 @@ Then answer the prompts
 
 # Results
 
-See [results.md](results.md)
+See [results.md](https://davidragone.github.io/llm-speed-test/)
 
 
 ## ollama benchmark alternative

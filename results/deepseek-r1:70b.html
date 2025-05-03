@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar System Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+
+        .solar-system {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            perspective: 10000px;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform-origin: center;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            transform-origin: center;
+            cursor: pointer;
+        }
+
+        .controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .info-panel {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="solar-system" id="solarSystem">
+        <!-- Orbits and planets will be added here -->
+    </div>
+    
+    <div class="controls">
+        Zoom: Mouse wheel<br>
+        Speed: + / - keys<br>
+        Pause/Play: Space
+    </div>
+
+    <div class="info-panel" id="infoPanel">
+        Click or hover on a celestial body to see information.
+    </div>
+
+    <script>
+        const solarSystem = document.getElementById('solarSystem');
+        let zoomLevel = 1;
+        let speedMultiplier = 1;
+        let isPaused = false;
+
+        // Celestial body data
+        const bodies = {
+            sun: {
+                size: 50,
+                color: '#ff9933',
+                info: 'The Sun, our star, center of the solar system'
+            },
+            planets: [
+                { name: 'Mercury', distance: 70, period: 88, size: 10, color: '#A0522D' },
+                { name: 'Venus', distance: 100, period: 225, size: 15, color: '#DEB887' },
+                { name: 'Earth', distance: 140, period: 365, size: 16, color: '#4169E1' },
+                { name: 'Mars', distance: 180, period: 687, size: 12, color: '#CD5C5C' },
+                { name: 'Jupiter', distance: 240, period: 4333, size: 30, color: '#DAA520' },
+                { name: 'Saturn', distance: 300, period: 10759, size: 25, color: '#F4A460' },
+                { name: 'Uranus', distance: 350, period: 30687, size: 20, color: '#87CEEB' },
+                { name: 'Neptune', distance: 390, period: 60190, size: 19, color: '#4682B4' }
+            ],
+            moons: [
+                { parent: 'Earth', name: 'Moon', distance: 20, period: 27.3, size: 8, color: '#F0F0F0' },
+                // Add more moons as needed
+            ]
+        };
+
+        function createOrbit(distance) {
+            const orbit = document.createElement('div');
+            orbit.className = 'orbit';
+            orbit.style.width = `${distance * 2}px`;
+            orbit.style.height = `${distance * 2}px`;
+            return orbit;
+        }
+
+        function createPlanet(config, isMoon = false) {
+            const planet = document.createElement('div');
+            planet.className = 'planet';
+            planet.style.width = `${config.size * 2}px`;
+            planet.style.height = `${config.size * 2}px`;
+            planet.style.backgroundColor = config.color;
+            if (!isMoon) {
+                planet.innerHTML = `<span style="position:absolute;transform:translate(-50%,-50%);color:white;font-size:12px;">${config.name}</span>`;
+            }
+            
+            // Add info handler
+            planet.addEventListener('mouseover', () => showInfo(config));
+            planet.addEventListener('click', () => showInfo(config));
+            
+            return planet;
+        }
+
+        function showInfo(body) {
+            const infoPanel = document.getElementById('infoPanel');
+            let info = `<h3>${body.name || body}</h3>`;
+            if (body.period) {
+                info += `Orbital Period: ${body.period} days<br>Distance from Sun: ${body.distance} AU`;
+            }
+            if (body.info) {
+                info += `<br><br>${body.info}`;
+            }
+            infoPanel.innerHTML = info;
+        }
+
+        function animate() {
+            if (!isPaused) {
+                // Update planet positions
+                const time = Date.now() * speedMultiplier / 1000;
+                
+                bodies.planets.forEach(planet => {
+                    const angle = (time / planet.period) * 2 * Math.PI;
+                    const distance = planet.distance * zoomLevel;
+                    
+                    const x = Math.cos(angle) * distance;
+                    const y = Math.sin(angle) * distance;
+                    
+                    solarSystem.querySelector(`.${planet.name.toLowerCase()}`).style.transform = 
+                        `translate(${x}px, ${y}px)`;
+                });
+
+                // Animate moons (simplified)
+                bodies.moons.forEach(moon => {
+                    const angle = (time / moon.period) * 2 * Math.PI;
+                    const distance = moon.distance * zoomLevel;
+                    
+                    const x = Math.cos(angle) * distance;
+                    const y = Math.sin(angle) * distance;
+                    
+                    solarSystem.querySelector(`.${moon.name.toLowerCase()}`).style.transform = 
+                        `translate(${x}px, ${y}px)`;
+                });
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize solar system
+        function initialize() {
+            // Create Sun
+            const sun = createPlanet(bodies.sun);
+            sun.style.width = `${bodies.sun.size * 2}px`;
+            sun.style.height = `${bodies.sun.size * 2}px`;
+            sun.style.transform = 'translate(-50%, -50%)';
+            solarSystem.appendChild(sun);
+
+            // Create planets and their orbits
+            bodies.planets.forEach(planet => {
+                const orbit = createOrbit(planet.distance);
+                const planetDiv = createPlanet(planet);
+                orbit.appendChild(planetDiv);
+                solarSystem.appendChild(orbit);
+                
+                // Add class for selection
+                planetDiv.className += ` ${planet.name.toLowerCase()}`;
+            });
+
+            // Create moons and their orbits
+            bodies.moons.forEach(moon => {
+                const orbit = createOrbit(moon.distance);
+                const moonDiv = createPlanet({ name: moon.name, size: moon.size, color: moon.color });
+                orbit.appendChild(moonDiv);
+                solarSystem.appendChild(orbit);
+                
+                // Add class for selection
+                moonDiv.className += ` ${moon.name.toLowerCase()}`;
+            });
+
+            animate();
+        }
+
+        // Event listeners
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            zoomLevel *= e.deltaY > 0 ? 1.1 : 0.9;
+            solarSystem.style.transform = `scale(${zoomLevel})`;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ') {
+                isPaused = !isPaused;
+            }
+            if (e.key === '+' || e.key === '=') {
+                speedMultiplier *= 2;
+            }
+            if (e.key === '-') {
+                speedMultiplier /= 2;
+            }
+        });
+
+        initialize();
+    </script>
+</html>

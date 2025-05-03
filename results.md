@@ -9,3 +9,4 @@
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:8b | 57.289 | 0.033 | 148 | 0.294 | 503.401 | 3889 | 5.696 | 682.759 | [thinking](results/results/deepseek-r1:8b.md) [html](results/results/deepseek-r1:8b.html) | tbd | tbd |
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:14b | 106.608 | 3.458 | 148 | 0.542 | 273.063 | 3983 | 10.261 | 388.169 | [thinking](results/results/deepseek-r1:14b.md) [html](results/results/deepseek-r1:14b.html) | FALSE | No planets displayed |
 | Mac M3 Ultra 512GB | ollama | deepseek-r1:32b | 91.02 | 7.236 | 148 | 1.142 | 129.597 | 1901 | 8.264 | 230.034 | [thinking](results/results/deepseek-r1:32b.md) [html](results/results/deepseek-r1:32b.html) | tbd | tbd |
+| Mac M3 Ultra 512GB | ollama | deepseek-r1:70b | 232.302 | 14.052 | 148 | 6.753 | 21.916 | 2487 | 21.15 | 117.589 | [thinking](results/results/deepseek-r1:70b.md) [html](results/results/deepseek-r1:70b.html) | tbd | tbd |

@@ -73,7 +73,7 @@ class SpeedTest
 
     # append to File
     File.open('results.md', 'a') do |file|
-      file.puts "| #{device} | #{service} | #{model} | #{total_duration} sec | #{load_duration} sec | #{prompt_eval_count} tokens | #{prompt_eval_duration} sec | #{prompt_eval_rate} tokens/s | #{eval_count} tokens | #{eval_duration} sec | #{eval_rate} tokens/s | [thinking](results/#{results_filename}.md) [html](results/#{results_filename}.html) | tbd | tbd |\n"
+      file.puts "| #{device} | #{service} | #{model} | #{total_duration} | #{load_duration} | #{prompt_eval_count} | #{prompt_eval_duration} | #{prompt_eval_rate} | #{eval_count} | #{eval_duration} | #{eval_rate} | [thinking](results/#{results_filename}.md) [html](results/#{results_filename}.html) | tbd | tbd |\n"
     end
   end
 

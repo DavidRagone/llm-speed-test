@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar System Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #solar-system {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            perspective: 2000px;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+            background: radial-gradient(#ffd700, #ff8c00);
+            border-radius: 50%;
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform-origin: 50% 50%;
+        }
+
+        .planet {
+            position: absolute;
+            top: -4px; /* Adjust for circle positioning */
+            left: 50%;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .info-tooltip {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="zoomOut()">Zoom Out -</button>
+        <button onclick="zoomIn()">Zoom In +</button>
+        <button onclick="togglePause()">Pause ▶</button>
+        <button onclick="resetSpeed()">Reset Speed ⏳</button>
+        <input type="range" id="speedSlider" min="0.1" max="2" step="0.1" value="1" oninput="updateSpeed(this.value)">
+    </div>
+    <canvas id="starBackground"></canvas>
+    <div id="solar-system">
+        <div class="sun" id="sun"></div>
+    </div>
+
+    <script>
+        let isAnimating = true;
+        let zoomLevel = 1;
+        let speedFactor = 1;
+        const planets = [
+            {
+                name: 'Mercury',
+                size: 0.38,
+                distance: 70,
+                period: 88,
+                rotation: 59,
+                discovery: 'Ancient'
+            },
+            {
+                name: 'Venus',
+                size: 0.95,
+                distance: 100,
+                period: 225,
+                rotation: -67,
+                discovery: 'Ancient'
+            },
+            {
+                name: 'Earth',
+                size: 1,
+                distance: 130,
+                period: 365.25,
+                rotation: 24,
+                discovery: 'Ancient'
+            },
+            // Add more planets and moons here...
+        ];
+
+        function init() {
+            createOrbits();
+            createPlanets();
+            animate();
+        }
+
+        function createOrbits() {
+            planets.forEach((planet, index) => {
+                const orbit = document.createElement('div');
+                orbit.className = 'orbit';
+                orbit.style.width = `${planet.distance * 2}px`;
+                orbit.style.height = `${planet.distance * 2}px`;
+                orbit.dataset.index = index;
+                document.getElementById('solar-system').appendChild(orbit);
+            });
+        }
+
+        function createPlanets() {
+            planets.forEach((planet, index) => {
+                const planetDiv = document.createElement('div');
+                planetDiv.className = 'planet';
+                planetDiv.style.width = `${planet.size * 20}px`;
+                planetDiv.style.height = `${planet.size * 20}px`;
+                planetDiv.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
+                planetDiv.dataset.index = index;
+                
+                // Add click handler for info
+                planetDiv.addEventListener('click', () => showPlanetInfo(planet));
+                
+                document.getElementById('solar-system').appendChild(planetDiv);
+            });
+        }
+
+        function animate() {
+            if (!isAnimating) return;
+
+            planets.forEach((planet, index) => {
+                const orbit = document.querySelector(`.orbit[data-index="${index}"]`);
+                const planetElement = document.querySelector(`.planet[data-index="${index}"]`);
+                
+                // Update planet position
+                const angle = (Date.now() * speedFactor / 1000) % (2 * Math.PI);
+                const x = orbit.width / 2 + Math.cos(angle) * (orbit.width / 2 - 50);
+                const y = orbit.height / 2 + Math.sin(angle) * (orbit.height / 2 - 50);
+
+                planetElement.style.transform = `translate(${x}px, ${y}px)`;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        function zoomIn() {
+            if (zoomLevel < 3) {
+                zoomLevel *= 1.1;
+                applyZoom();
+            }
+        }
+
+        function zoomOut() {
+            if (zoomLevel > 0.5) {
+                zoomLevel /= 1.1;
+                applyZoom();
+            }
+        }
+
+        function applyZoom() {
+            const solarSystem = document.getElementById('solar-system');
+            solarSystem.style.transform = `scale(${zoomLevel})`;
+        }
+
+        function togglePause() {
+            isAnimating = !isAnimating;
+        }
+
+        function resetSpeed() {
+            speedFactor = 1;
+        }
+
+        function updateSpeed(value) {
+            speedFactor = parseFloat(value);
+        }
+
+        function showPlanetInfo(planet) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'info-tooltip';
+            tooltip.innerHTML = `
+                <h3>${planet.name}</h3>
+                <p>Size: ${planet.size} Earth radii</p>
+                <p>Distance: ${planet.distance} million km</p>
+                <p>Orbital Period: ${planet.period} days</p>
+                <p>Rotation Period: ${planet.rotation} hours</p>
+                <p>Discovered: ${planet.discovery}</p>
+            `;
+            document.body.appendChild(tooltip);
+
+            // Position tooltip near the clicked planet
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + 50}px`;
+            tooltip.style.top = `${rect.top + 50}px`;
+
+            // Remove tooltip after some time
+            setTimeout(() => {
+                document.body.removeChild(tooltip);
+            }, 3000);
+        }
+
+        // Initialize background stars (optional)
+        const canvas = document.getElementById('starBackground');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const ctx = canvas.getContext('2d');
+        
+        function drawStars() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < 500; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                ctx.fillStyle = 'white';
+                ctx.fillRect(x, y, 1, 1);
+            }
+        }
+
+        drawStars();
+
+        init();
+    </script>
+</body>
+</html>

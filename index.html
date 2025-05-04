@@ -76,6 +76,14 @@
     }
 
     loadMarkdownTable();
+
+    // After populating the table
+    $(document).ready(function () {
+        $('#data-table').DataTable({
+            paging: false, // Optional: turn off paging if not needed
+            order: [],     // Optional: default no sort
+        });
+    });
 </script>
 </body>
 
